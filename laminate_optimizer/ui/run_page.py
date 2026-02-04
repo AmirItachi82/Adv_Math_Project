@@ -187,12 +187,12 @@ class RunPage(QWidget):
     def _setup_ui(self):
         """Set up the user interface."""
         main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(16, 16, 16, 16)
-        main_layout.setSpacing(16)
+        main_layout.setContentsMargins(12, 12, 12, 12)
+        main_layout.setSpacing(12)
         
-        # Left panel: Settings (360px)
+        # Left panel: Settings (320px for 1024x800 window)
         left_panel = self._create_settings_panel()
-        left_panel.setFixedWidth(360)
+        left_panel.setFixedWidth(320)
         main_layout.addWidget(left_panel)
         
         # Right panel: Results and plot
@@ -209,7 +209,7 @@ class RunPage(QWidget):
         # Header
         header = QLabel("GA Settings")
         header.setObjectName("header")
-        header.setStyleSheet("font-size: 18pt; font-weight: bold; color: #0078d4;")
+        header.setStyleSheet("font-size: 18pt; font-weight: bold; color: #007DD7;")
         layout.addWidget(header)
         
         # Scroll area for settings
@@ -327,39 +327,141 @@ class RunPage(QWidget):
         
         scroll_layout.addWidget(constraint_group)
         
-        # Target strains group
-        target_group = QGroupBox("Optimization Targets")
-        target_layout = QGridLayout(target_group)
-        target_layout.setSpacing(8)
+        # Target strains group - Normal strains
+        strain_group = QGroupBox("Target Strains (Normal)")
+        strain_layout = QGridLayout(strain_group)
+        strain_layout.setSpacing(6)
         
         # Target strain εx
-        target_layout.addWidget(QLabel("Target εx:"), 0, 0)
+        strain_layout.addWidget(QLabel("εx:"), 0, 0)
         self._target_ex_spin = QDoubleSpinBox()
         self._target_ex_spin.setRange(-1.0, 1.0)
         self._target_ex_spin.setDecimals(6)
         self._target_ex_spin.setValue(0.0287)
         self._target_ex_spin.setSingleStep(0.001)
-        target_layout.addWidget(self._target_ex_spin, 0, 1)
+        strain_layout.addWidget(self._target_ex_spin, 0, 1)
         
         # Target strain εy
-        target_layout.addWidget(QLabel("Target εy:"), 1, 0)
+        strain_layout.addWidget(QLabel("εy:"), 1, 0)
         self._target_ey_spin = QDoubleSpinBox()
         self._target_ey_spin.setRange(-1.0, 1.0)
         self._target_ey_spin.setDecimals(6)
         self._target_ey_spin.setValue(-0.0085)
         self._target_ey_spin.setSingleStep(0.001)
-        target_layout.addWidget(self._target_ey_spin, 1, 1)
+        strain_layout.addWidget(self._target_ey_spin, 1, 1)
         
-        # Applied force Nx
-        target_layout.addWidget(QLabel("Force Nx (N/m):"), 2, 0)
+        # Target strain γxy
+        strain_layout.addWidget(QLabel("γxy:"), 2, 0)
+        self._target_gxy_spin = QDoubleSpinBox()
+        self._target_gxy_spin.setRange(-1.0, 1.0)
+        self._target_gxy_spin.setDecimals(6)
+        self._target_gxy_spin.setValue(0.0)
+        self._target_gxy_spin.setSingleStep(0.001)
+        strain_layout.addWidget(self._target_gxy_spin, 2, 1)
+        
+        scroll_layout.addWidget(strain_group)
+        
+        # Target strains group - Moment strains (curvatures)
+        curvature_group = QGroupBox("Target Strains (Curvature)")
+        curvature_layout = QGridLayout(curvature_group)
+        curvature_layout.setSpacing(6)
+        
+        # Target curvature κx
+        curvature_layout.addWidget(QLabel("κx (1/m):"), 0, 0)
+        self._target_kx_spin = QDoubleSpinBox()
+        self._target_kx_spin.setRange(-100.0, 100.0)
+        self._target_kx_spin.setDecimals(6)
+        self._target_kx_spin.setValue(0.0)
+        self._target_kx_spin.setSingleStep(0.001)
+        curvature_layout.addWidget(self._target_kx_spin, 0, 1)
+        
+        # Target curvature κy
+        curvature_layout.addWidget(QLabel("κy (1/m):"), 1, 0)
+        self._target_ky_spin = QDoubleSpinBox()
+        self._target_ky_spin.setRange(-100.0, 100.0)
+        self._target_ky_spin.setDecimals(6)
+        self._target_ky_spin.setValue(0.0)
+        self._target_ky_spin.setSingleStep(0.001)
+        curvature_layout.addWidget(self._target_ky_spin, 1, 1)
+        
+        # Target curvature κxy
+        curvature_layout.addWidget(QLabel("κxy (1/m):"), 2, 0)
+        self._target_kxy_spin = QDoubleSpinBox()
+        self._target_kxy_spin.setRange(-100.0, 100.0)
+        self._target_kxy_spin.setDecimals(6)
+        self._target_kxy_spin.setValue(0.0)
+        self._target_kxy_spin.setSingleStep(0.001)
+        curvature_layout.addWidget(self._target_kxy_spin, 2, 1)
+        
+        scroll_layout.addWidget(curvature_group)
+        
+        # Applied forces group
+        force_group = QGroupBox("Applied Forces (N/m)")
+        force_layout = QGridLayout(force_group)
+        force_layout.setSpacing(6)
+        
+        # Force Nx
+        force_layout.addWidget(QLabel("Nx:"), 0, 0)
         self._force_nx_spin = QDoubleSpinBox()
         self._force_nx_spin.setRange(-1e9, 1e9)
         self._force_nx_spin.setDecimals(0)
         self._force_nx_spin.setValue(2e6)
         self._force_nx_spin.setSingleStep(1e5)
-        target_layout.addWidget(self._force_nx_spin, 2, 1)
+        force_layout.addWidget(self._force_nx_spin, 0, 1)
         
-        scroll_layout.addWidget(target_group)
+        # Force Ny
+        force_layout.addWidget(QLabel("Ny:"), 1, 0)
+        self._force_ny_spin = QDoubleSpinBox()
+        self._force_ny_spin.setRange(-1e9, 1e9)
+        self._force_ny_spin.setDecimals(0)
+        self._force_ny_spin.setValue(0.0)
+        self._force_ny_spin.setSingleStep(1e5)
+        force_layout.addWidget(self._force_ny_spin, 1, 1)
+        
+        # Force Nxy
+        force_layout.addWidget(QLabel("Nxy:"), 2, 0)
+        self._force_nxy_spin = QDoubleSpinBox()
+        self._force_nxy_spin.setRange(-1e9, 1e9)
+        self._force_nxy_spin.setDecimals(0)
+        self._force_nxy_spin.setValue(0.0)
+        self._force_nxy_spin.setSingleStep(1e5)
+        force_layout.addWidget(self._force_nxy_spin, 2, 1)
+        
+        scroll_layout.addWidget(force_group)
+        
+        # Applied moments group
+        moment_group = QGroupBox("Applied Moments (N·m/m)")
+        moment_layout = QGridLayout(moment_group)
+        moment_layout.setSpacing(6)
+        
+        # Moment Mx
+        moment_layout.addWidget(QLabel("Mx:"), 0, 0)
+        self._moment_mx_spin = QDoubleSpinBox()
+        self._moment_mx_spin.setRange(-1e9, 1e9)
+        self._moment_mx_spin.setDecimals(0)
+        self._moment_mx_spin.setValue(0.0)
+        self._moment_mx_spin.setSingleStep(1e3)
+        moment_layout.addWidget(self._moment_mx_spin, 0, 1)
+        
+        # Moment My
+        moment_layout.addWidget(QLabel("My:"), 1, 0)
+        self._moment_my_spin = QDoubleSpinBox()
+        self._moment_my_spin.setRange(-1e9, 1e9)
+        self._moment_my_spin.setDecimals(0)
+        self._moment_my_spin.setValue(0.0)
+        self._moment_my_spin.setSingleStep(1e3)
+        moment_layout.addWidget(self._moment_my_spin, 1, 1)
+        
+        # Moment Mxy
+        moment_layout.addWidget(QLabel("Mxy:"), 2, 0)
+        self._moment_mxy_spin = QDoubleSpinBox()
+        self._moment_mxy_spin.setRange(-1e9, 1e9)
+        self._moment_mxy_spin.setDecimals(0)
+        self._moment_mxy_spin.setValue(0.0)
+        self._moment_mxy_spin.setSingleStep(1e3)
+        moment_layout.addWidget(self._moment_mxy_spin, 2, 1)
+        
+        scroll_layout.addWidget(moment_group)
         
         # Random seed group
         seed_group = QGroupBox("Reproducibility")
@@ -380,8 +482,8 @@ class RunPage(QWidget):
         note_frame = QFrame()
         note_frame.setStyleSheet("""
             QFrame {
-                background-color: #2d2d30;
-                border: 1px solid #0078d4;
+                background-color: #132035;
+                border: 1px solid #007DD7;
                 border-radius: 4px;
                 padding: 8px;
             }
@@ -390,7 +492,7 @@ class RunPage(QWidget):
         note_layout.setContentsMargins(12, 12, 12, 12)
         
         note_title = QLabel("📘 Composite Engineering Note")
-        note_title.setStyleSheet("font-weight: bold; color: #0078d4;")
+        note_title.setStyleSheet("font-weight: bold; color: #007DD7;")
         note_layout.addWidget(note_title)
         
         note_text = QLabel(
@@ -433,7 +535,7 @@ class RunPage(QWidget):
         # Header
         header = QLabel("Optimization Results")
         header.setObjectName("header")
-        header.setStyleSheet("font-size: 18pt; font-weight: bold; color: #0078d4;")
+        header.setStyleSheet("font-size: 18pt; font-weight: bold; color: #007DD7;")
         layout.addWidget(header)
         
         # Plot (55% height)
@@ -446,7 +548,7 @@ class RunPage(QWidget):
         
         self._plot_widget = pg.PlotWidget()
         self._plot_widget.setBackground(style['background'])
-        self._plot_widget.setMinimumHeight(350)
+        self._plot_widget.setMinimumHeight(250)
         self._plot_widget.showGrid(x=True, y=True, alpha=0.3)
         self._plot_widget.setLabel('left', 'Fitness Value')
         self._plot_widget.setLabel('bottom', 'Generation')
@@ -493,16 +595,36 @@ class RunPage(QWidget):
         
         layout.addLayout(control_layout)
         
-        # Results table (45% height)
+        # Bottom section with two tables side by side
+        tables_layout = QHBoxLayout()
+        
+        # Results table (left side)
         table_group = QGroupBox("Results History")
         table_layout = QVBoxLayout(table_group)
         
         self._results_table = QTableWidget()
         self._results_model = ResultsTableModel(self._results_table)
-        self._results_table.setMinimumHeight(200)
+        self._results_table.setMinimumHeight(150)
         table_layout.addWidget(self._results_table)
         
-        layout.addWidget(table_group)
+        tables_layout.addWidget(table_group, 3)
+        
+        # Optimum layup table (right side)
+        layup_group = QGroupBox("Optimum Layup")
+        layup_layout = QVBoxLayout(layup_group)
+        
+        self._layup_table = QTableWidget()
+        self._layup_table.setColumnCount(2)
+        self._layup_table.setHorizontalHeaderLabels(['Layer Index', 'Optimum Angle (°)'])
+        self._layup_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self._layup_table.setAlternatingRowColors(True)
+        self._layup_table.setMinimumHeight(150)
+        self._layup_table.setMinimumWidth(180)
+        layup_layout.addWidget(self._layup_table)
+        
+        tables_layout.addWidget(layup_group, 2)
+        
+        layout.addLayout(tables_layout)
         
         # Status label
         self._status_label = QLabel("Status: Ready")
@@ -533,9 +655,25 @@ class RunPage(QWidget):
         self._symmetry_check.setChecked(config.symmetry_required)
         self._balanced_check.setChecked(config.balanced_required)
         
+        # Target strains (normal)
         self._target_ex_spin.setValue(config.target_strains[0])
         self._target_ey_spin.setValue(config.target_strains[1])
+        self._target_gxy_spin.setValue(config.target_strains[2])
+        
+        # Target strains (curvature)
+        self._target_kx_spin.setValue(config.target_strains[3])
+        self._target_ky_spin.setValue(config.target_strains[4])
+        self._target_kxy_spin.setValue(config.target_strains[5])
+        
+        # Forces
         self._force_nx_spin.setValue(config.force_moment[0])
+        self._force_ny_spin.setValue(config.force_moment[1])
+        self._force_nxy_spin.setValue(config.force_moment[2])
+        
+        # Moments
+        self._moment_mx_spin.setValue(config.force_moment[3])
+        self._moment_my_spin.setValue(config.force_moment[4])
+        self._moment_mxy_spin.setValue(config.force_moment[5])
         
         if config.random_seed is not None:
             self._use_seed_check.setChecked(True)
@@ -548,11 +686,18 @@ class RunPage(QWidget):
         target_strains = [
             self._target_ex_spin.value(),
             self._target_ey_spin.value(),
-            0.0, 0.0, 0.0, 0.0
+            self._target_gxy_spin.value(),
+            self._target_kx_spin.value(),
+            self._target_ky_spin.value(),
+            self._target_kxy_spin.value()
         ]
         force_moment = [
             self._force_nx_spin.value(),
-            0.0, 0.0, 0.0, 0.0, 0.0
+            self._force_ny_spin.value(),
+            self._force_nxy_spin.value(),
+            self._moment_mx_spin.value(),
+            self._moment_my_spin.value(),
+            self._moment_mxy_spin.value()
         ]
         
         return {
@@ -653,6 +798,7 @@ class RunPage(QWidget):
         self._results_model.clear()
         self._best_curve.setData([], [])
         self._avg_curve.setData([], [])
+        self._layup_table.setRowCount(0)
         self._progress_bar.setValue(0)
         self._progress_bar.setFormat("Ready")
         self._status_label.setText("Status: Ready")
@@ -705,11 +851,30 @@ class RunPage(QWidget):
                 result.best_angles,
                 thickness
             )
+            
+            # Populate optimum layup table
+            self._update_layup_table(result.best_angles)
         else:
             self._status_label.setText(f"Status: ⚠️ {result.message}")
             self._status_label.setStyleSheet("color: #ffc107; padding: 4px;")
         
         self.optimization_finished.emit(result)
+    
+    def _update_layup_table(self, angles: List[float]):
+        """Update the optimum layup table with the best angles."""
+        self._layup_table.setRowCount(len(angles))
+        for i, angle in enumerate(angles):
+            # Layer index
+            index_item = QTableWidgetItem(str(i + 1))
+            index_item.setTextAlignment(Qt.AlignCenter)
+            index_item.setFlags(index_item.flags() & ~Qt.ItemIsEditable)
+            self._layup_table.setItem(i, 0, index_item)
+            
+            # Optimum angle
+            angle_item = QTableWidgetItem(f"{angle:.1f}°")
+            angle_item.setTextAlignment(Qt.AlignCenter)
+            angle_item.setFlags(angle_item.flags() & ~Qt.ItemIsEditable)
+            self._layup_table.setItem(i, 1, angle_item)
     
     @Slot()
     def _on_optimization_aborted(self):

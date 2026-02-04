@@ -44,15 +44,15 @@ class MainWindow(QMainWindow):
     - Tab-based navigation between pages
     - Menu bar for file operations
     - Status bar for application state
-    - Fixed 1280x1024 resolution
+    - Fixed 1024x800 resolution
     
     Pages:
     1. Optimization & Monitoring - GA settings and live results
     2. Layup Editor - Excel-like ply data editing
     """
     
-    WINDOW_WIDTH = 1280
-    WINDOW_HEIGHT = 1024
+    WINDOW_WIDTH = 1024
+    WINDOW_HEIGHT = 800
     
     def __init__(self):
         super().__init__()
