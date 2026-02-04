@@ -123,7 +123,7 @@ class LaminateTableModel(QAbstractTableModel):
         if role == Qt.BackgroundRole:
             # Zebra striping
             if row % 2 == 1:
-                return QColor('#292929')
+                return QColor('#0A1628')
         
         return None
     
@@ -239,7 +239,7 @@ class LayupEditor(QWidget):
         header_layout = QHBoxLayout()
         title = QLabel("Laminate Layup Editor")
         title.setObjectName("header")
-        title.setStyleSheet("font-size: 18pt; font-weight: bold; color: #0078d4;")
+        title.setStyleSheet("font-size: 18pt; font-weight: bold; color: #007DD7;")
         header_layout.addWidget(title)
         header_layout.addStretch()
         main_layout.addLayout(header_layout)
@@ -363,8 +363,8 @@ class LayupEditor(QWidget):
         note_frame = QFrame()
         note_frame.setStyleSheet("""
             QFrame {
-                background-color: #2d2d30;
-                border: 1px solid #0078d4;
+                background-color: #132035;
+                border: 1px solid #007DD7;
                 border-radius: 4px;
                 padding: 8px;
             }
@@ -373,7 +373,7 @@ class LayupEditor(QWidget):
         note_layout.setContentsMargins(12, 12, 12, 12)
         
         note_title = QLabel("📘 Composite Engineering Note")
-        note_title.setStyleSheet("font-weight: bold; color: #0078d4;")
+        note_title.setStyleSheet("font-weight: bold; color: #007DD7;")
         note_layout.addWidget(note_title)
         
         note_text = QLabel(
