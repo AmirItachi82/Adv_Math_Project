@@ -190,9 +190,10 @@ class RunPage(QWidget):
         main_layout.setContentsMargins(12, 12, 12, 12)
         main_layout.setSpacing(12)
         
-        # Left panel: Settings (320px for 1024x800 window)
+        # Left panel: Settings (320px for 1400x750 window)
         left_panel = self._create_settings_panel()
         left_panel.setFixedWidth(320)
+        left_panel.setContentsMargins(8, 8, 8, 8)
         main_layout.addWidget(left_panel)
         
         # Right panel: Results and plot
@@ -530,7 +531,7 @@ class RunPage(QWidget):
         panel = QWidget()
         layout = QVBoxLayout(panel)
         layout.setSpacing(16)
-        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setContentsMargins(8, 8, 8, 8)
         
         # Header
         header = QLabel("Optimization Results")
@@ -538,9 +539,15 @@ class RunPage(QWidget):
         header.setStyleSheet("font-size: 18pt; font-weight: bold; color: #007DD7;")
         layout.addWidget(header)
         
-        # Plot (55% height)
+        # Top section: Plot on left, Optimum Layup on right
+        plot_and_layup_layout = QHBoxLayout()
+        plot_and_layup_layout.setSpacing(12)
+        
+        # Plot (left side)
         plot_group = QGroupBox("Live Fitness Plot")
+        plot_group.setContentsMargins(8, 8, 8, 8)
         plot_layout = QVBoxLayout(plot_group)
+        plot_layout.setContentsMargins(8, 16, 8, 8)
         
         # Configure pyqtgraph for dark theme
         pg.setConfigOptions(antialias=True)
@@ -565,10 +572,33 @@ class RunPage(QWidget):
         )
         
         plot_layout.addWidget(self._plot_widget)
-        layout.addWidget(plot_group)
+        # Plot gets stretch factor 3 to take majority of horizontal space (~75%)
+        plot_and_layup_layout.addWidget(plot_group, 3)
+        
+        # Optimum layup table (right side of chart)
+        layup_group = QGroupBox("Optimum Layup")
+        layup_group.setContentsMargins(8, 8, 8, 8)
+        layup_layout = QVBoxLayout(layup_group)
+        layup_layout.setContentsMargins(8, 16, 8, 8)
+        
+        self._layup_table = QTableWidget()
+        self._layup_table.setColumnCount(2)
+        self._layup_table.setHorizontalHeaderLabels(['Layer Index', 'Optimum Angle (°)'])
+        self._layup_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self._layup_table.setAlternatingRowColors(True)
+        self._layup_table.setMinimumHeight(250)
+        # Fixed width range for consistent appearance alongside the chart
+        self._layup_table.setFixedWidth(220)
+        layup_layout.addWidget(self._layup_table)
+        
+        plot_and_layup_layout.addWidget(layup_group)
+        
+        layout.addLayout(plot_and_layup_layout)
         
         # Control section
         control_layout = QHBoxLayout()
+        control_layout.setSpacing(12)
+        control_layout.setContentsMargins(0, 8, 0, 8)
         
         # Progress bar
         self._progress_bar = QProgressBar()
@@ -595,36 +625,18 @@ class RunPage(QWidget):
         
         layout.addLayout(control_layout)
         
-        # Bottom section with two tables side by side
-        tables_layout = QHBoxLayout()
-        
-        # Results table (left side)
+        # Bottom section: Results History table (full width)
         table_group = QGroupBox("Results History")
+        table_group.setContentsMargins(8, 8, 8, 8)
         table_layout = QVBoxLayout(table_group)
+        table_layout.setContentsMargins(8, 16, 8, 8)
         
         self._results_table = QTableWidget()
         self._results_model = ResultsTableModel(self._results_table)
-        self._results_table.setMinimumHeight(150)
+        self._results_table.setMinimumHeight(120)
         table_layout.addWidget(self._results_table)
         
-        tables_layout.addWidget(table_group, 3)
-        
-        # Optimum layup table (right side)
-        layup_group = QGroupBox("Optimum Layup")
-        layup_layout = QVBoxLayout(layup_group)
-        
-        self._layup_table = QTableWidget()
-        self._layup_table.setColumnCount(2)
-        self._layup_table.setHorizontalHeaderLabels(['Layer Index', 'Optimum Angle (°)'])
-        self._layup_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self._layup_table.setAlternatingRowColors(True)
-        self._layup_table.setMinimumHeight(150)
-        self._layup_table.setMinimumWidth(180)
-        layup_layout.addWidget(self._layup_table)
-        
-        tables_layout.addWidget(layup_group, 2)
-        
-        layout.addLayout(tables_layout)
+        layout.addWidget(table_group)
         
         # Status label
         self._status_label = QLabel("Status: Ready")
