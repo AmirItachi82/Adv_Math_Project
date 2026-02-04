@@ -572,6 +572,7 @@ class RunPage(QWidget):
         )
         
         plot_layout.addWidget(self._plot_widget)
+        # Plot gets stretch factor 3 to take majority of horizontal space (~75%)
         plot_and_layup_layout.addWidget(plot_group, 3)
         
         # Optimum layup table (right side of chart)
@@ -586,8 +587,8 @@ class RunPage(QWidget):
         self._layup_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self._layup_table.setAlternatingRowColors(True)
         self._layup_table.setMinimumHeight(250)
-        self._layup_table.setMinimumWidth(200)
-        self._layup_table.setMaximumWidth(250)
+        # Fixed width range for consistent appearance alongside the chart
+        self._layup_table.setFixedWidth(220)
         layup_layout.addWidget(self._layup_table)
         
         plot_and_layup_layout.addWidget(layup_group)
