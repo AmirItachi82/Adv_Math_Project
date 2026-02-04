@@ -1,0 +1,18 @@
+# Laminate Optimizer Dependencies
+# Python 3.10+
+
+# GUI Framework
+PySide6>=6.5.0
+
+# Plotting (real-time updates)
+pyqtgraph>=0.13.0
+
+# Dark Theme (optional - will use built-in stylesheet if not available)
+# qdarktheme>=2.1.0
+
+# Data Handling
+pandas>=2.0.0
+openpyxl>=3.1.0
+
+# Numerical Computing
+numpy>=1.24.0
