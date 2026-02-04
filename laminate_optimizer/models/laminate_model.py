@@ -17,6 +17,12 @@ import pandas as pd
 import numpy as np
 
 
+# Tolerance for angle comparisons in degrees
+# Composite Engineering Note: 0.01 degrees is well below typical manufacturing
+# tolerance (~0.5-1 degree) but allows for floating point comparison
+ANGLE_TOLERANCE_DEG = 0.01
+
+
 @dataclass
 class PlyData:
     """
@@ -354,13 +360,14 @@ class LaminateModel:
             return True
         
         angles = self._df['deg'].values
-        non_zero_angles = angles[np.abs(angles) > 0.01]  # Exclude 0 and 90 deg
-        non_zero_angles = non_zero_angles[np.abs(np.abs(non_zero_angles) - 90) > 0.01]
+        # Exclude 0 and 90 degree plies (they don't need balance)
+        non_zero_angles = angles[np.abs(angles) > ANGLE_TOLERANCE_DEG]
+        non_zero_angles = non_zero_angles[np.abs(np.abs(non_zero_angles) - 90) > ANGLE_TOLERANCE_DEG]
         
         # Count positive and negative angles
         for angle in np.unique(np.abs(non_zero_angles)):
-            pos_count = np.sum(np.isclose(non_zero_angles, angle))
-            neg_count = np.sum(np.isclose(non_zero_angles, -angle))
+            pos_count = np.sum(np.isclose(non_zero_angles, angle, atol=ANGLE_TOLERANCE_DEG))
+            neg_count = np.sum(np.isclose(non_zero_angles, -angle, atol=ANGLE_TOLERANCE_DEG))
             if pos_count != neg_count:
                 return False
         return True

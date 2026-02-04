@@ -458,7 +458,7 @@ class RunPage(QWidget):
             name='Best Fitness'
         )
         self._avg_curve = self._plot_widget.plot(
-            pen=pg.mkPen(color=style['avg_fitness_color'], width=2, style=Qt.DashLine),
+            pen=pg.mkPen(color=style['avg_fitness_color'], width=2, style=Qt.PenStyle.DashLine),
             name='Avg Fitness'
         )
         

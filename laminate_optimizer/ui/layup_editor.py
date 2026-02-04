@@ -538,10 +538,14 @@ class LayupEditor(QWidget):
     
     def _update_constraint_status(self, df: pd.DataFrame, non_core: list):
         """Update constraint status indicators."""
+        # Tolerance for angle comparison in degrees
+        # Composite Engineering Note: 0.1 degrees is typical manufacturing tolerance
+        ANGLE_TOLERANCE = 0.1
+        
         # Symmetry check
         if len(df) > 0:
             angles = df['deg'].values
-            is_symmetric = np.allclose(angles, angles[::-1])
+            is_symmetric = np.allclose(angles, angles[::-1], atol=ANGLE_TOLERANCE)
             if is_symmetric:
                 self._symmetry_status.setText("Symmetry: ✅ Symmetric")
                 self._symmetry_status.setStyleSheet("color: #28a745;")

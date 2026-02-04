@@ -170,7 +170,8 @@ class DemoGA:
         try:
             ans = np.linalg.solve(FM, f)
         except np.linalg.LinAlgError:
-            ans = np.linalg.pinv(FM).dot(f)
+            # Use lstsq for numerically stable solution of ill-conditioned systems
+            ans = np.linalg.lstsq(FM, f, rcond=None)[0]
         
         ply_stress = []
         for ply in plies:

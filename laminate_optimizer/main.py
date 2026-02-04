@@ -60,8 +60,11 @@ def main():
     app.setApplicationVersion("1.0.0")
     app.setOrganizationName("Composite Engineering")
     
-    # Set default font
-    font = QFont("Segoe UI", 11)
+    # Set default font with cross-platform fallbacks
+    # Segoe UI (Windows), -apple-system (macOS), Liberation Sans (Linux)
+    font = QFont()
+    font.setFamilies(["Segoe UI", "-apple-system", "Liberation Sans", "DejaVu Sans", "sans-serif"])
+    font.setPointSize(11)
     app.setFont(font)
     
     # Apply dark theme
