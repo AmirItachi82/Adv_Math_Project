@@ -217,7 +217,7 @@ laminate_optimizer/
 
 The application follows these design principles:
 
-- **Fixed window size**: 1280 × 1024 for consistent layout
+- **Fixed window size**: 1400 × 750 for consistent layout
 - **Dark theme**: Reduced eye strain for extended use
 - **Font sizes**: Body 12pt, Titles 16-18pt
 - **Padding**: Minimum 12px for comfortable spacing

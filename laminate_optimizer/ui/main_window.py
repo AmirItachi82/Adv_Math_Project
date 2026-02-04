@@ -6,7 +6,7 @@ This module provides the main application window which contains
 the tab-based navigation between the optimization page and the
 layup editor page.
 
-The window is fixed at 1280x1024 to ensure consistent layout
+The window is fixed at 1400x750 to ensure consistent layout
 across different displays.
 """
 
@@ -44,15 +44,15 @@ class MainWindow(QMainWindow):
     - Tab-based navigation between pages
     - Menu bar for file operations
     - Status bar for application state
-    - Fixed 1024x800 resolution
+    - Fixed 1400x750 resolution
     
     Pages:
     1. Optimization & Monitoring - GA settings and live results
     2. Layup Editor - Excel-like ply data editing
     """
     
-    WINDOW_WIDTH = 1024
-    WINDOW_HEIGHT = 800
+    WINDOW_WIDTH = 1400
+    WINDOW_HEIGHT = 750
     
     def __init__(self):
         super().__init__()
